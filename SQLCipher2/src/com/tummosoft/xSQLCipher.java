@@ -23,7 +23,7 @@ import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
 
 @BA.ShortName("xSQLCipher")
-@BA.Version(1.01f)
+@BA.Version(1.02f)
 @BA.DependsOn(values = {"android-database-sqlcipher-4.5.4.aar"})
 public class xSQLCipher extends SQL {
 
@@ -57,7 +57,7 @@ public class xSQLCipher extends SQL {
         this.ba = ba;
 
         helper = new SQLiteHelper(_baContext, database, null, version);
-        if (password != null) {
+        if (password == null) {
             db = (SQLiteDatabase) helper.getReadableDatabase("");
         } else {
             db = (SQLiteDatabase) helper.getReadableDatabase(password);
