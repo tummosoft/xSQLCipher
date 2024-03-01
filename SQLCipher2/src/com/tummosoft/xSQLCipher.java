@@ -90,8 +90,7 @@ public class xSQLCipher extends SQL {
         db.changePassword(password);
     }
 
-    public String getDatabasePath() {
-        db.changePassword(KEY_SECRECT);
+    public String getDatabasePath() {        
         return db.getPath();
     }
 
@@ -104,22 +103,22 @@ public class xSQLCipher extends SQL {
         if (originalFile.exists()) {
             File newFile = File.createTempFile("sqlcipherutils", "tmp",
                     ctxt.getCacheDir());
-            SQLiteDatabase db = SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(), "", null, SQLiteDatabase.OPEN_READWRITE);
-            int version = db.getVersion();
-            db.close();
-            db = SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), passphrase,
+            SQLiteDatabase tempdb = SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(), "", null, SQLiteDatabase.OPEN_READWRITE);
+            int version = tempdb.getVersion();
+            tempdb.close();
+            tempdb = SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), passphrase,
                     null, SQLiteDatabase.OPEN_READWRITE, null, null);
 
-            final SQLiteStatement st = db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
+            final SQLiteStatement st = tempdb.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
 
             st.bindString(1, originalFile.getAbsolutePath());
             st.execute();
 
-            db.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')");
-            db.rawExecSQL("DETACH DATABASE plaintext");
-            db.setVersion(version);
+            tempdb.rawExecSQL("SELECT sqlcipher_export('main', 'plaintext')");
+            tempdb.rawExecSQL("DETACH DATABASE plaintext");
+            tempdb.setVersion(version);
             st.close();
-            db.close();
+            tempdb.close();
 
             originalFile.delete();
             newFile.renameTo(originalFile);
@@ -143,27 +142,27 @@ public class xSQLCipher extends SQL {
             File newFile
                     = File.createTempFile("sqlcipherutils", "tmp",
                             ctxt.getCacheDir());
-            SQLiteDatabase db
+            SQLiteDatabase tempdb
                     = SQLiteDatabase.openDatabase(originalFile.getAbsolutePath(),
                             passphrase, null, SQLiteDatabase.OPEN_READWRITE, null, null);
 
-            final SQLiteStatement st = db.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
+            final SQLiteStatement st = tempdb.compileStatement("ATTACH DATABASE ? AS plaintext KEY ''");
 
             st.bindString(1, newFile.getAbsolutePath());
             st.execute();
 
-            db.rawExecSQL("SELECT sqlcipher_export('plaintext')");
-            db.rawExecSQL("DETACH DATABASE plaintext");
+            tempdb.rawExecSQL("SELECT sqlcipher_export('plaintext')");
+            tempdb.rawExecSQL("DETACH DATABASE plaintext");
 
-            int version = db.getVersion();
+            int version = tempdb.getVersion();
 
             st.close();
-            db.close();
+            tempdb.close();
 
-            db = SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), "",
+            tempdb = SQLiteDatabase.openDatabase(newFile.getAbsolutePath(), "",
                     null, SQLiteDatabase.OPEN_READWRITE);
-            db.setVersion(version);
-            db.close();
+            tempdb.setVersion(version);
+            tempdb.close();
 
             originalFile.delete();
             newFile.renameTo(originalFile);
