@@ -2,28 +2,22 @@ package com.tummosoft;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteException;
-import androidx.sqlite.db.SupportSQLiteDatabase;
 import anywheresoftware.b4a.AbsObjectWrapper;
 import anywheresoftware.b4a.BA;
 import anywheresoftware.b4a.objects.collections.List;
 import anywheresoftware.b4a.sql.SQL;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipInputStream;
-import net.sqlcipher.BuildConfig;
 import net.sqlcipher.DatabaseUtils;
-import net.sqlcipher.database.SQLiteClosable;
 import net.sqlcipher.database.SQLiteDatabase;
 import net.sqlcipher.database.SQLiteStatement;
+import org.greenrobot.eventbus.EventBus;
 
 @BA.ShortName("xSQLCipher")
-@BA.Version(1.02f)
+@BA.Version(1.03f)
 @BA.DependsOn(values = {"android-database-sqlcipher-4.5.4.aar"})
 public class xSQLCipher extends SQL {
 
@@ -39,15 +33,10 @@ public class xSQLCipher extends SQL {
     public void initializeCipher(BA ba, String event, String database, String password, int version) {
         _baContext = ba.context;
         SQLiteDatabase.loadLibs(_baContext);
-        _eventName = event;
+        _eventName = event.toLowerCase();
         this.ba = ba;
-
-        helper = new SQLiteHelper(_baContext, database, null, version);
-        if (password.isEmpty()) {
-            db = (SQLiteDatabase) helper.getReadableDatabase("");
-        } else {
-            db = (SQLiteDatabase) helper.getReadableDatabase(password);
-        }
+        helper = new SQLiteHelper(_baContext, database, null, version);       
+        createDB(password, null);
     }
 
     public void initializeCipher2(BA ba, String event, String database, byte[] password, int version) {
@@ -57,10 +46,22 @@ public class xSQLCipher extends SQL {
         this.ba = ba;
 
         helper = new SQLiteHelper(_baContext, database, null, version);
-        if (password == null) {
-            db = (SQLiteDatabase) helper.getReadableDatabase("");
-        } else {
-            db = (SQLiteDatabase) helper.getReadableDatabase(password);
+        createDB("",password);
+    }
+    
+    private void createDB(String password1, byte[] password2) {
+          try {
+             if (password1.isEmpty()) {
+                db = (SQLiteDatabase) helper.getWritableDatabase("");
+            } else if (!password1.isEmpty()) {
+                db = (SQLiteDatabase) helper.getWritableDatabase(password1);
+            } else if (password2 != null) {
+                db = (SQLiteDatabase) helper.getWritableDatabase(password2);
+            }
+        } catch(xSQLiteException ex) {
+            BA.LogError("Wrong password");
+        } finally {
+           BA.LogInfo("Load database success");
         }
     }
 
@@ -90,7 +91,7 @@ public class xSQLCipher extends SQL {
         db.changePassword(password);
     }
 
-    public String getDatabasePath() {        
+    public String getDatabasePath() {
         return db.getPath();
     }
 
@@ -189,7 +190,7 @@ public class xSQLCipher extends SQL {
     }
 
     /**
-     * Executes a single non query SQL statement. null     Example:<code>
+     * Executes a single non query SQL statement. null null     Example:<code>
 	 *SQL1.ExecNonQuery("CREATE TABLE table1 (col1 TEXT , col2 INTEGER, col3 INTEGER)")</code>
      * If you plan to do many "writing" queries one after another, then you
      * should consider using BeginTransaction / EndTransaction. It will execute
@@ -205,7 +206,7 @@ public class xSQLCipher extends SQL {
      * Executes a single non query SQL statement. The statement can include
      * question marks which will be replaced by the items in the given list.
      * Note that Basic4android converts arrays to lists implicitly. The values
-     * in the list should be strings, numbers or bytes arrays. null     Example:<code>
+     * in the list should be strings, numbers or bytes arrays. null null     Example:<code>
 	 *SQL1.ExecNonQuery2("INSERT INTO table1 VALUES (?, ?, 0)", Array As Object("some text", 2))</code>
      */
     @Override
@@ -226,7 +227,7 @@ public class xSQLCipher extends SQL {
     /**
      * Adds a non-query statement to the batch of statements. The statements are
      * (asynchronously) executed when you call ExecNonQueryBatch. Args parameter
-     * can be Null if it is not needed. null     Example:<code>
+     * can be Null if it is not needed. null null     Example:<code>
 	 *For i = 1 To 1000
      *	sql.AddNonQueryToBatch("INSERT INTO table1 VALUES (?)", Array(Rnd(0, 100000)))
      *Next
@@ -245,7 +246,7 @@ public class xSQLCipher extends SQL {
      * You should call AddNonQueryToBatch one or more times before calling this
      * method to add statements to the batch. Note that this method internally
      * begins and ends a transaction. Returns an object that can be used as the
-     * sender filter for Wait For calls. null     Example:<code>
+     * sender filter for Wait For calls. null null     Example:<code>
 	 *For i = 1 To 1000
      *	sql.AddNonQueryToBatch("INSERT INTO table1 VALUES (?)", Array(Rnd(0, 100000)))
      *Next
@@ -288,7 +289,7 @@ public class xSQLCipher extends SQL {
      * Asynchronously executes the given query. The QueryComplete event will be
      * raised when the results are ready. Note that ResultSet extends Cursor.
      * You can use Cursor if preferred. Returns an object that can be used as
-     * the sender filter for Wait For calls. null     Example:<code>
+     * the sender filter for Wait For calls. null null     Example:<code>
 	 *Dim SenderFilter As Object = sql.ExecQueryAsync("SQL", "SELECT * FROM table1", Null)
      *Wait For (SenderFilter) SQL_QueryComplete (Success As Boolean, rs As ResultSet)
      *If Success Then
@@ -333,7 +334,7 @@ public class xSQLCipher extends SQL {
 
     /**
      * Executes the query and returns a cursor which is used to go over the
-     * results. null     Example:<code>
+     * results. null null     Example:<code>
 	 *Dim Cursor As Cursor
      *Cursor = SQL1.ExecQuery("SELECT col1, col2 FROM table1")
      *For i = 0 To Cursor.RowCount - 1
@@ -351,7 +352,7 @@ public class xSQLCipher extends SQL {
     /**
      * Executes the query and returns a cursor which is used to go over the
      * results. The query can include question marks which will be replaced with
-     * the values in the array. null     Example:<code>
+     * the values in the array. null null     Example:<code>
 	 *Dim Cursor As Cursor
      *Cursor = sql1.ExecQuery2("SELECT col1 FROM table1 WHERE col3 = ?", Array As String(22))</code>
      * SQLite will try to convert the string values based on the columns types.
@@ -364,7 +365,8 @@ public class xSQLCipher extends SQL {
 
     /**
      * Executes the query and returns the value in the first column and the
-     * first row (in the result set). Returns Null if no results were found. null     Example:<code>
+     * first row (in the result set). Returns Null if no results were found.
+     * null null     Example:<code>
 	 *Dim NumberOfMatches As Int
      *NumberOfMatches = SQL1.ExecQuerySingleResult("SELECT count(*) FROM table1 WHERE col2 > 300")</code>
      */
@@ -375,7 +377,8 @@ public class xSQLCipher extends SQL {
 
     /**
      * Executes the query and returns the value in the first column and the
-     * first row (in the result set). Returns Null if no results were found. null     Example:<code>
+     * first row (in the result set). Returns Null if no results were found.
+     * null null     Example:<code>
 	 *Dim NumberOfMatches As Int
      *NumberOfMatches = SQL1.ExecQuerySingleResult2("SELECT count(*) FROM table1 WHERE col2 > ?", Array As String(300))</code>
      */
