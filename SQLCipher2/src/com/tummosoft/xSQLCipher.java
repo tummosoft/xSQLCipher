@@ -30,7 +30,7 @@ public class xSQLCipher extends SQL {
     static private SQLiteDatabase db;
     private SQLiteHelper helper;
 
-    public void initializeCipher(BA ba, String event, String database, String password, int version) {
+    public void initializeCipher(final BA ba, String event, String database, String password, int version) {
         _baContext = ba.context;
         SQLiteDatabase.loadLibs(_baContext);
         this.ba = ba;
@@ -38,8 +38,48 @@ public class xSQLCipher extends SQL {
         helper = new SQLiteHelper(_baContext, database, null, version);
         LoadDB(password, null);
     }
-
-    public void initializeCopy(BA ba, String event, String DBSource, String password, int version) {
+    
+     public void initialize3(final BA ba, String DBpath, String password, int version) {
+        _baContext = ba.context;
+        SQLiteDatabase.loadLibs(_baContext);        
+        File dbtarget = new File(DBpath);        
+        if (dbtarget.exists()) {           
+           db = SQLiteDatabase.openOrCreateDatabase(dbtarget, password, null, null, null);
+           db.setVersion(version);        
+        }        
+    }
+    
+    public void initializeOnlyOpen(final BA ba, String DBpath, String password, int version) {
+        _baContext = ba.context;
+        SQLiteDatabase.loadLibs(_baContext);        
+        File dbtarget = new File(DBpath);        
+        if (dbtarget.exists()) {           
+           db = SQLiteDatabase.openDatabase(DBpath, password, null, SQLiteDatabase.OPEN_READWRITE);           
+           db.setVersion(version);        
+        }        
+    } 
+    
+    public void initializeOnlyOpen2(final BA ba, String DBpath, byte[] password, int version) {
+        _baContext = ba.context;
+        SQLiteDatabase.loadLibs(_baContext);        
+        File dbtarget = new File(DBpath);        
+        if (dbtarget.exists()) {           
+           db = SQLiteDatabase.openDatabase(DBpath, password, null, SQLiteDatabase.OPEN_READWRITE, null, null);           
+           db.setVersion(version);        
+        }        
+    } 
+     
+    public void initialize4(final BA ba, String DBpath, byte[] password, int version) {
+        _baContext = ba.context;
+        SQLiteDatabase.loadLibs(_baContext);        
+        File dbtarget = new File(DBpath);        
+        if (dbtarget.exists()) {           
+           db = SQLiteDatabase.openOrCreateDatabase(DBpath, password, null);
+           db.setVersion(version);        
+        }        
+    }
+     
+    public void initializeCopy(final BA ba, String event, String DBSource, String password, int version) {
         _baContext = ba.context;
         SQLiteDatabase.loadLibs(_baContext);
         
@@ -55,7 +95,7 @@ public class xSQLCipher extends SQL {
         _eventName = event;
     }
 
-    public void initializeCipher2(BA ba, String event, String database, byte[] password, int version) {
+    public void initializeCipher2(final BA ba, String event, String database, byte[] password, int version) {
         _baContext = ba.context;
         SQLiteDatabase.loadLibs(_baContext);
         xEncrypter.backupDatabase(_baContext, database, database);
