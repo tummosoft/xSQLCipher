@@ -2,30 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/xSQLCipher.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SQLiteEvent.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SQLiteUpdateTaskFromFile.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/PreferencesHelper.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/TokenManager.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SecureSecretKeySpec.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/xEncrypter.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/EncryptionIO.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/TestSqlite.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/Backup.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/EncryptedDatabaseAdapter.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/BindingsRecorder.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/xSQLiteException.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/BaseDatabaseOpenHelper.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/EncryptedPreferences.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SQLiteHelper.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/MasterSecret.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SQliteDatabase.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/Program.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/SQLiteUpdateTaskHelper.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/Rules.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/EncryptedDatabaseOpenHelper.java</file>
-            <file>file:/D:/ANDROID/JAVALIBS/SQLCipher/xSQLCipher/SQLCipher2/src/com/tummosoft/DatabaseExport.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
